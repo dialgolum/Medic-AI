@@ -1,0 +1,18 @@
+# Core AI Frameworks
+crewai
+crewai-tools
+langchain-groq  # The specific package for Groq integration
+
+# Web App & API
+streamlit
+fastapi
+uvicorn
+
+# Database & Security
+sqlalchemy
+passlib[bcrypt]
+python-jose[cryptography]
+
+# Utilities
+python-dotenv
+requests
