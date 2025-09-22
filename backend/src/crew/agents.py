@@ -49,7 +49,7 @@ advice_agent = Agent(
 )
 
 def create_symptom_tasks(user_input):
-    # Task for the Symptom Classifier
+    
     classify_task = Task(
         description=(
             "Analyze the user input and extract a simple, comma-separated list of medical symptoms.\n\n"
@@ -62,7 +62,7 @@ def create_symptom_tasks(user_input):
         agent=symptom_classifier
     )
 
-    # Task for the Condition Matcher
+    
     match_condition_task = Task(
         description=(
             "Use the output from the previous task, which is a comma-separated string of symptoms, "
@@ -70,7 +70,7 @@ def create_symptom_tasks(user_input):
         ),
         expected_output="A bulleted list of potential medical conditions based on the search results.",
         agent=condition_matcher,
-        # This explicitly passes the previous task's output as an argument to this task
+        
         context=[classify_task]
     )
 
