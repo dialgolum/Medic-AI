@@ -74,6 +74,7 @@ else:
     st.info("Describe your symptoms below. This tool is for informational purposes only and is not a substitute for professional medical advice.")
     user_input = st.text_area("How are you feeling?", height=150)
 
+
     if st.button("Analyze Symptoms"):
         if user_input:
             with st.spinner("Your AI agents are analyzing your symptoms..."):
