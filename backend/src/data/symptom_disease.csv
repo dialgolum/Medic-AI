@@ -1,10 +1,10 @@
- disease	symptoms
-Common Cold	runny nose,sore throat,cough,sneezing,headache
-Influenza (Flu)	fever,cough,sore throat,muscle aches,fatigue,headache
-Pneumonia	cough,fever,chills,difficulty breathing
-Strep Throat	sore throat,fever,swollen tonsils,pain when swallowing
-Migraine	headache,nausea,vomiting,sensitivity to light
-Allergic Rhinitis	sneezing,runny nose,itchy eyes,congestion
-Gastroenteritis	diarrhea,vomiting,stomach pain,fever
-COVID-19	fever,cough,fatigue,loss of taste,loss of smell,sore throat
-Bronchitis	cough,mucus production,fatigue,shortness of breath,chest discomfort
+ disease, symptoms
+Common Cold, "runny nose,sore throat,cough,sneezing,headache"
+Influenza (Flu), "fever,cough,sore throat,muscle aches,fatigue,headache"
+Pneumonia, "cough,fever,chills,difficulty breathing"
+Strep Throat, "sore throat,fever,swollen tonsils,pain when swallowing"
+Migraine, "headache,nausea,vomiting,sensitivity to light"
+Allergic Rhinitis, "sneezing,runny nose,itchy eyes,congestion"
+Gastroenteritis, "diarrhea,vomiting,stomach pain,fever"
+COVID-19, "fever,cough,fatigue,loss of taste,loss of smell,sore throat"
+Bronchitis, "cough,mucus production,fatigue,shortness of breath,chest discomfort"
