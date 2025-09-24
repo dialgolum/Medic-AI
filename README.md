@@ -48,7 +48,7 @@ Medic-AI employs a **multi-agent system** to handle user queries. Each agent has
 ## 💻 Technology Stack
 - **Backend**: Python, FastAPI  
 - **Frontend**: Streamlit  
-- **Core Libraries**: Pandas, Scikit-learn (or other ML libraries as needed)  
+- **Core Libraries**: Pandas, Scikit-learn, Crew-ai, langchain-groq 
 
 ---
 
