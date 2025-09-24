@@ -1,17 +1,16 @@
-# crew/tools.py
 import os
 import requests
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 
-# Define the input schema for the tool using Pydantic
+
 
 
 class PubMedSearchInput(BaseModel):
     symptoms: str = Field(
         description="A comma-separated string of medical symptoms.")
 
-# Define the tool by inheriting from BaseTool
+
 
 
 class PubMedSearchTool(BaseTool):
@@ -54,5 +53,5 @@ class PubMedSearchTool(BaseTool):
             return f"An error occurred while searching PubMed: {e}"
 
 
-# Instantiate your tool so it can be imported and used by agents
+
 pubmed_tool = PubMedSearchTool()

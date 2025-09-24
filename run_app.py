@@ -47,7 +47,7 @@ def register(username, password):
         st.error("Connection failed. Is the API server running?")
         return False
 
-# --- UI ---
+
 st.title("🩺 Agentic AI Symptom Checker")
 
 if not st.session_state.token:
