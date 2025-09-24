@@ -7,7 +7,7 @@ def local_search_tool(symptoms: str) -> str:
     """Searches a local CSV file to find diseases matching a list of symptoms. 
     The input to this tool should be a single, comma-separated string of symptoms."""
     try:
-        # Build a reliable path to the data file
+        
         script_dir = Path(__file__).resolve().parent.parent
         data_path = script_dir / "data" / "symptom_disease.csv"
         df = pd.read_csv(data_path)
