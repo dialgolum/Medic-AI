@@ -72,8 +72,8 @@ pip install -r requirements.txt
 ### How to run
 
 ```bash
-uvicorn api.main_api:app --reload
-streamlit run app.py
+uvicorn src.api.main_api:app --reload --app-dir backend
+streamlit run run_app.py
 ```
 
 
