@@ -2,6 +2,7 @@ import os
 from crewai import Agent, Task, Crew, Process
 from langchain_groq import ChatGroq
 from .local_tools import local_search_tool
+# from .tools import pubmed_tool
 
 
 llm = ChatGroq(
@@ -23,7 +24,7 @@ symptom_classifier = Agent(
 #     role='Condition Matcher',
 #     goal='Cross-reference symptoms with a medical knowledge base to find potential conditions.',
 #     backstory='You are a highly analytical AI medical researcher. You use your tools to find conditions associated with a list of symptoms.',
-#     verbose=True,
+#     verbose=False,
 #     allow_delegation=False,
 #     tools=[pubmed_tool],
 #     llm=llm
@@ -41,7 +42,7 @@ condition_matcher = Agent(
 
 advice_agent = Agent(
     role='Medical Advice Provider',
-    goal='Provide responsible, general healthcare advice based on potential conditions.',
+    goal='Provide responsible, general healthcare advice based on potential conditions, keep advice easy to read and understand.',
     backstory='You are a cautious AI healthcare assistant. You MUST always start your advice with a strong disclaimer that you are not a doctor and the user should consult a real healthcare professional.',
     verbose=True,
     allow_delegation=False,
