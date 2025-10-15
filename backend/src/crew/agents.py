@@ -1,15 +1,18 @@
+# crew/agents.py
 import os
 from crewai import Agent, Task, Crew, Process
 from langchain_groq import ChatGroq
+# from .tools import pubmed_tool
 from .local_tools import local_search_tool
 
 
+# Initialize the Groq LLM
 llm = ChatGroq(
     model_name="groq/llama-3.1-8b-instant",
     groq_api_key=os.getenv("GROQ_API_KEY")
 )
 
-
+# ---- AGENTS ----
 symptom_classifier = Agent(
     role='Symptom Classifier',
     goal='Accurately extract and list key medical symptoms from user input.',
@@ -39,6 +42,17 @@ condition_matcher = Agent(
     llm=llm
 )
 
+# ✅ New Agent: Risk Assessment
+risk_assessment_agent = Agent(
+    role='Risk Assessment Specialist',
+    goal='Assess severity and likelihood for each possible condition and suggest a general action plan.',
+    backstory='You are a responsible AI healthcare assistant that classifies each condition as Low, Medium, or High severity, '
+              'and recommends appropriate next steps such as rest, doctor consultation, or emergency care.',
+    verbose=False,
+    allow_delegation=False,
+    llm=llm
+)
+
 advice_agent = Agent(
     role='Medical Advice Provider',
     goal='Provide responsible, general healthcare advice based on potential conditions.',
@@ -48,8 +62,11 @@ advice_agent = Agent(
     llm=llm
 )
 
+# ---- TASKS ----
+# In crew/agents.py
+
 def create_symptom_tasks(user_input):
-    
+    # Task for the Symptom Classifier
     classify_task = Task(
         description=(
             "Analyze the user input and extract a simple, comma-separated list of medical symptoms.\n\n"
@@ -62,7 +79,7 @@ def create_symptom_tasks(user_input):
         agent=symptom_classifier
     )
 
-    
+    # Task for the Condition Matcher
     match_condition_task = Task(
         description=(
             "Use the output from the previous task, which is a comma-separated string of symptoms, "
@@ -70,11 +87,24 @@ def create_symptom_tasks(user_input):
         ),
         expected_output="A bulleted list of potential medical conditions based on the search results.",
         agent=condition_matcher,
-        
+        # This explicitly passes the previous task's output as an argument to this task
         context=[classify_task]
     )
 
+    # ✅ New Task: Severity Scoring + Risk Assessment
+    risk_assessment_task = Task(
+        description=(
+            "Based on the matched medical conditions, assign each condition a severity level (Low, Medium, High) and "
+            "a suggested action (Rest, See a doctor soon, Emergency care). Return a clean markdown table."
+        ),
+        expected_output=(
+            "A markdown table with columns: Condition | Likelihood | Severity | Suggested Action"
+        ),
+        agent=risk_assessment_agent,
+        context=[match_condition_task]
+    )
 
+    # Task for the Advice Agent
     provide_advice_task = Task(
         description=(
             "Based on the list of potential conditions, provide general, non-prescriptive health advice. "
@@ -85,14 +115,46 @@ def create_symptom_tasks(user_input):
         context=[match_condition_task]
     )
     
-    return [classify_task, match_condition_task, provide_advice_task]
+    return [classify_task, match_condition_task, risk_assessment_task, provide_advice_task]
 
-
+# ---- CREW ----
 def create_symptom_crew(user_input):
     tasks = create_symptom_tasks(user_input)
-    return Crew(
+
+    crew = Crew(
         agents=[symptom_classifier, condition_matcher, advice_agent],
         tasks=tasks,
         process=Process.sequential,
-        verbose=True
+        verbose=False
     )
+
+    # Run the crew
+    result = crew.kickoff()
+
+    full_output = ""
+
+    try:
+        for task in crew.tasks:
+            # ✅ Filter only required agent roles
+            if hasattr(task, "output") and task.output:
+                if task.agent.role in ["Risk Assessment Specialist", "Medical Advice Provider"]:
+                    full_output += f"\n### {task.agent.role} Output:\n{task.output}\n"
+    except Exception:
+        pass
+
+    # ✅ If we gathered filtered outputs, return them
+    if full_output.strip():
+        return full_output
+    else:
+        # ✅ Otherwise, fallback logic
+        if isinstance(result, str):
+            return result
+        elif hasattr(result, "output"):
+            return result.output
+        elif hasattr(result, "raw_output"):
+            return result.raw_output
+        elif hasattr(result, "final_output"):
+            return result.final_output
+        else:
+            return str(result)
+    

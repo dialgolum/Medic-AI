@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-SECRET_KEY = "your-super-secret-key-that-should-be-in-env"
+SECRET_KEY = "123456753357886578888653357899"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
