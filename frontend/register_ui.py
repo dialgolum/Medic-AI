@@ -38,5 +38,7 @@ def register_page():
             st.warning("Please fill in all fields.")
         elif password != confirm_password:
             st.error("Passwords do not match.")
+        else:
+            register(username, password, name, age, gender)
     
     st.markdown('</div>', unsafe_allow_html=True)
