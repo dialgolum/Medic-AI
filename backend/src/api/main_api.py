@@ -10,6 +10,14 @@ app = FastAPI()
 
 @app.post("/register/", response_model=schemas.UserInDB)
 def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+
+    if user.age < 12:
+        raise HTTPException(status_code=400, detail="Users below 12 years old cannot register.")
+    
+    if len(user.password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters long.")
+
+
     db_user = db.query(models.User).filter(models.User.username == user.username).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")

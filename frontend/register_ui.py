@@ -26,7 +26,7 @@ def register_page():
     st.subheader("📝 Register")
 
     name = st.text_input("🧑 Name", placeholder="Enter your full name", key="register_name")
-    age = st.number_input("🎂 Age", min_value=1, max_value=120, step=1, key="register_age")
+    age = st.number_input("🎂 Age", min_value=12, max_value=120, step=1, key="register_age")
     gender = st.selectbox("⚧ Gender", ["Male", "Female", "Other"], key="register_gender")
 
     username = st.text_input("👤 Username", placeholder="Enter a username", key="register_username")
@@ -36,8 +36,12 @@ def register_page():
     if st.button("📝 Register", use_container_width=True):
         if not(username and password and confirm_password and name and age and gender):
             st.warning("Please fill in all fields.")
+        elif len(password) < 6:
+            st.error("Password must be at least 6 characters long.")
         elif password != confirm_password:
             st.error("Passwords do not match.")
+        elif age < 12:
+            st.error("Sorry, users under 12 years old cannot register.")
         else:
             register(username, password, name, age, gender)
     
