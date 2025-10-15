@@ -9,6 +9,9 @@ def login(username, password):
         if response.status_code == 200:
             st.session_state.token = response.json()['access_token']
             st.session_state.username = username
+            # st.session_state.name = name
+            # st.session_state.age = age
+            
             st.success("✅ Login successful! Redirecting...")
             st.rerun()
         else:

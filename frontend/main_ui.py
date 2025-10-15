@@ -67,6 +67,10 @@ def main_ui():
         st.session_state.username = None
         st.rerun()
 
+    if st.sidebar.button("✏️ Edit Profile", use_container_width=True):
+        st.session_state.page = "edit_profile"
+        st.rerun()
+
     st.sidebar.markdown("""
     ### 💡 Tips for Better Analysis
     - Be specific about your symptoms  

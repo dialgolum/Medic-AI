@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from frontend.login_ui import login_page
 from frontend.register_ui import register_page
 from frontend.main_ui import main_ui
+from frontend.edit_profile_ui import edit_profile_ui
 
 load_dotenv()
 
@@ -26,7 +27,10 @@ if 'token' not in st.session_state:
 if 'username' not in st.session_state:
     st.session_state.username = None
 if 'auth_mode' not in st.session_state:
-    st.session_state.auth_mode = "Login"  # Default
+    st.session_state.auth_mode = "Login"  # Default 
+if 'page' not in st.session_state:
+    st.session_state.page = "main" 
+
 
 # Global header
 st.markdown('<h1 style="text-align:center; color:#1f77b4;">🩺 AI Symptom Checker</h1>', unsafe_allow_html=True)
@@ -52,7 +56,10 @@ if not st.session_state.token:
 
 else:
     # If logged in, go to main app UI
-    main_ui()
+    if st.session_state.page == "main":
+        main_ui()
+    elif st.session_state.page == "edit_profile":
+            edit_profile_ui()
 
 # Footer
 st.markdown("---")
