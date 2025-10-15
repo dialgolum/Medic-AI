@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from . import models, schemas, security
 from .database import engine, get_db
+from .schemas import LoginRequest
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -13,14 +14,23 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
     hashed_password = security.get_password_hash(user.password)
-    new_user = models.User(username=user.username, hashed_password=hashed_password)
+    # new_user = models.User(username=user.username, hashed_password=hashed_password)
+
+    new_user = models.User(
+        username=user.username,
+        hashed_password=hashed_password,
+        name=user.name,
+        age=user.age,
+        gender=user.gender
+    )
+    
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return new_user
 
 @app.post("/token", response_model=schemas.Token)
-def login_for_access_token(user_data: schemas.UserCreate, db: Session = Depends(get_db)):
+def login_for_access_token(user_data: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == user_data.username).first()
     if not user or not security.verify_password(user_data.password, user.hashed_password):
         raise HTTPException(
