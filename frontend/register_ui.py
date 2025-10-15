@@ -31,11 +31,12 @@ def register_page():
 
     username = st.text_input("👤 Username", placeholder="Enter a username", key="register_username")
     password = st.text_input("🔒 Password", type="password", placeholder="Enter a password", key="register_password")
+    confirm_password = st.text_input("✅ Confirm Password", type="password", placeholder="Re-enter your password", key="register_confirm_password")
 
     if st.button("📝 Register", use_container_width=True):
-        if username and password and name and age and gender:
-            register(username, password, name, age, gender)
-        else:
+        if not(username and password and confirm_password and name and age and gender):
             st.warning("Please fill in all fields.")
+        elif password != confirm_password:
+            st.error("Passwords do not match.")
     
     st.markdown('</div>', unsafe_allow_html=True)
